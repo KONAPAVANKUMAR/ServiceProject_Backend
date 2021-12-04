@@ -17,6 +17,12 @@ class Service(models.Model):
   def __str__(self):
     return self.name
 
+class Order(models.Model):
+  _id = models.AutoField(primary_key=True, editable=False)
+  user = models.ForeignKey(User, on_delete=models.SET_NULL, null = True)
+  service = models.ForeignKey(Service, on_delete=models.SET_NULL, null = True)
+  status = models.CharField(max_length=200, null=True, blank=True)
+  
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
   if created:

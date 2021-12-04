@@ -12,6 +12,8 @@ urlpatterns = [
   path('users/currentuser',views.getCurrentUser),
   path('users/logout', views.Logout, name='user_logout'),
   path('users/<int:pk>',views.UserDetail),
+  path('users/', views.getAllUsers, name='getusers'), #--> to view all user ids, should be logged in as serviceProvider
+
   #start of service views,urls
   path('service/create',views.createService, name="createService"),
   path('service/list',views.listService, name="listService"),
@@ -19,5 +21,11 @@ urlpatterns = [
   path('service/list/<int:pk>',views.listById, name="listById"),
   path('service/edit/<int:pk>',views.editList, name="editList"),
   path('service/delete/<int:pk>',views.deleteList, name="deleteList"),
+
+  #phase 2 development
+  path('service/<int:pk>/<int:clientid>/accept', views.acceptService, name='acceptService'),
+  path('service/<int:pk>/<int:clientid>/reject', views.rejectService, name='rejectService'),
+  path('service/<int:pk>/<int:clientid>/status', views.showStatusService, name='showStatusService'),
+  path('service/<int:pk>/selectService', views.selectService, name='selectService'),
 
 ] 

@@ -150,3 +150,89 @@ def getCurrentUser(request):
 def UserDetail(request,pk):
     user = User.objects.get(id=pk)
     return Response({"id":user.id,"username":user.username,"email":user.email})
+
+#phase 2 development
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+@allowed_users(allowed_roles=['serviceproviders'])
+def acceptService(request, pk, clientid):
+  try:
+    user = clientid
+    serviceById = Service.objects.get(_id=pk)
+    SelectedOrder = Order.objects.get(
+      user = user,
+      service = serviceById
+    )
+
+    SelectedOrder.status = 'accepted'
+    SelectedOrder.save()
+
+    serializer = OrderSerializer(SelectedOrder, many = False)
+    
+    return Response(serializer.data)
+  except:
+    return Response({"Message":"invalid Route"})
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+@allowed_users(allowed_roles=['serviceproviders'])
+def rejectService(request, pk, clientid):
+  try:
+    user = clientid
+    serviceById = Service.objects.get(_id=pk)
+    SelectedOrder = Order.objects.get(
+      user = user,
+      service = serviceById
+    )
+
+    SelectedOrder.status = 'rejected'
+    SelectedOrder.save()
+
+    serializer = OrderSerializer(SelectedOrder, many = False)
+    
+    return Response(serializer.data)
+  except:
+    return Response({"Message":"invalid Route"})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def showStatusService(request, pk, clientid):
+  try:
+    user = clientid
+    serviceById = Service.objects.get(_id=pk)
+    SelectedOrder = Order.objects.get(
+      user = user,
+      service = serviceById
+    )
+    
+
+    data = SelectedOrder.status
+  
+    return Response({"status":data})
+  except:
+    return Response({"Message":"invalid Route"})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@allowed_users(allowed_roles=['clients'])
+def selectService(request, pk):
+  try:
+    serviceById = Service.objects.get(_id=pk)
+    Order.objects.create(
+      user = request.user,
+      service = serviceById
+    )
+
+    return Response({"Message":"service selected"})
+  except:
+    return Response({"Message":"invalid Route"})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@allowed_users(allowed_roles=['serviceproviders'])
+def getAllUsers(request):
+  users = User.objects.all()
+  serializer = UserSerializer(users, many = True)
+
+  return Response(serializer.data)
+
