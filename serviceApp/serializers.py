@@ -13,6 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
+  userDetails = serializers.ReadOnlyField()
   class Meta:
     model = Order
     fields = '__all__'

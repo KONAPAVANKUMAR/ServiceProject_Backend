@@ -208,7 +208,7 @@ def showStatusService(request, pk, clientid):
 
     data = SelectedOrder.status
   
-    return Response({"status":data})
+    return Response({"Message":data})
   except:
     return Response({"Message":"invalid Route"})
 
@@ -222,7 +222,6 @@ def selectService(request, pk):
       user = request.user,
       service = serviceById
     )
-
     return Response({"Message":"service selected"})
   except:
     return Response({"Message":"invalid Route"})
@@ -236,3 +235,10 @@ def getAllUsers(request):
 
   return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@allowed_users(allowed_roles=['serviceproviders'])
+def getOrdersByService(request,serviceid):
+  orders = Order.objects.filter(service=Service.objects.get(_id = serviceid))
+  serializer = OrderSerializer(orders, many = True)
+  return Response(serializer.data)

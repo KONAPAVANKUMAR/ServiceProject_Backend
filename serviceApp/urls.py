@@ -27,5 +27,7 @@ urlpatterns = [
   path('service/<int:pk>/<int:clientid>/reject', views.rejectService, name='rejectService'),
   path('service/<int:pk>/<int:clientid>/status', views.showStatusService, name='showStatusService'),
   path('service/<int:pk>/selectService', views.selectService, name='selectService'),
+  # get all orders by service provider
+  path('service/<int:serviceid>/orders', views.getOrdersByService, name='getOrdersByService'),
 
 ] 

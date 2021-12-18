@@ -22,6 +22,15 @@ class Order(models.Model):
   user = models.ForeignKey(User, on_delete=models.SET_NULL, null = True)
   service = models.ForeignKey(Service, on_delete=models.SET_NULL, null = True)
   status = models.CharField(max_length=200, null=True, blank=True)
+
+  @property
+  def userDetails(self):
+    # return all fields in json format
+    return {
+      'id': self.user.id,
+      'username': self.user.username,
+      'email': self.user.email,
+    }
   
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
